@@ -18,6 +18,8 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 
 ## Intro
 dmuv
+libuv version: 1.23.1
+
 
 ## Contacts
 [![Join the chat](https://badges.gitter.im/brinkqiang/dmuv/Lobby.svg)](https://gitter.im/brinkqiang/dmuv)
