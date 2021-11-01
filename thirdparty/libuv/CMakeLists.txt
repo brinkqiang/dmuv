@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.0)
 project(libuv)
 enable_testing()
 
-link_directories(${CMAKE_SOURCE_DIR}/lib)
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+INCLUDE(cmake/ModuleCompileOptions.cmake)
+ModuleSetCompileOptions()
+ModuleSetWinCompilerFlags()
 
 if(MSVC)
   list(APPEND uv_cflags /W4)
