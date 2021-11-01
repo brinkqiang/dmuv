@@ -15,4 +15,4 @@ ADD_DEFINITIONS(-DNOMINMAX)
 
 ModuleImport("libuv" "thirdparty/libuv")
 
-ExeImport("test" "uv_a")
+ExeImport("test" "libuv")
