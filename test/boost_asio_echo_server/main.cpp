@@ -77,14 +77,111 @@ void startAccept(io_service& io, ip::tcp::acceptor& acceptor)
 //    timer.async_wait(std::bind(&onTimer, std::ref(timer), std::placeholders::_1));
 //}
 
-int main(int argc, char* argv[])
-{
-    io_service io;
-    ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(ip::tcp::v4(), 10012));
-    startAccept(io, acceptor);
+#include "dmutil.h"
+#include "dmtimermodule.h"
+#include "dmsingleton.h"
+#include "dmthread.h"
+#include "dmconsole.h"
+#include "dmtypes.h"
 
-    //deadline_timer timer(io, boost::posix_time::milliseconds(1000));
-    //startTimer(timer);
+class CMain :
+    public IDMConsoleSink,
+    public IDMThread,
+    public CDMThreadCtrl,
+    public CDMTimerNode,
+    public TSingleton<CMain> {
+    friend class TSingleton<CMain>;
 
-    io.run();
+    typedef enum {
+        eTimerID_UUID = 0,
+        eTimerID_STOP,
+    } ETimerID;
+
+    typedef enum {
+        eTimerTime_UUID = 1000,
+        eTimerTime_STOP = 20000,
+    } ETimerTime;
+
+public:
+
+    virtual void ThrdProc() {
+        SetTimer(eTimerID_UUID, eTimerTime_UUID);
+
+        io_service io;
+        ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(ip::tcp::v4(), 10012));
+        startAccept(io, acceptor);
+
+        std::cout << "test start" << std::endl;
+
+        bool bBusy = false;
+
+        while (!m_bStop) {
+            bBusy = false;
+
+            if (CDMTimerModule::Instance()->Run()) {
+                bBusy = true;
+            }
+
+            if (io.poll_one()) {
+                bBusy = true;
+            }
+
+            if (!bBusy) {
+                SleepMs(1);
+            }
+        }
+
+        std::cout << "test stop" << std::endl;
+    }
+
+    virtual void Terminate() {
+        m_bStop = true;
+    }
+
+    virtual void OnCloseEvent() {
+        Stop();
+    }
+
+    virtual void OnTimer(uint64_t qwIDEvent, dm::any& oAny) {
+        switch (qwIDEvent) {
+        case eTimerID_UUID:
+        {
+            std::cout << DMFormatDateTime() << " " << cnt << std::endl;
+            cnt = 0;
+        }
+        break;
+        case eTimerID_STOP:
+        {
+            std::cout << DMFormatDateTime() << " test stopping..." << std::endl;
+            Stop();
+        }
+        break;
+
+        default:
+            break;
+        }
+    }
+
+private:
+    CMain()
+        : m_bStop(false) {
+        HDMConsoleMgr::Instance()->SetHandlerHook(this);
+    }
+
+    virtual ~CMain() {
+
+    }
+
+private:
+    bool __Run() {
+        return false;
+    }
+private:
+    volatile bool   m_bStop;
+};
+
+int main(int argc, char* argv[]) {
+    CMain::Instance()->Start(CMain::Instance());
+    CMain::Instance()->WaitFor();
+    return 0;
 }
