@@ -17,7 +17,8 @@ ADD_DEFINITIONS(-DASIO_STANDALONE)
 ModuleInclude("asio" "thirdparty/asio")
 
 ModuleImport("libuv" "thirdparty/libuv")
+ModuleImport("dmtimer" "thirdparty/dmtimer")
 
 LibImportDepends("uvcpp" "src/uvcpp" "libuv")
 
-ExeImport("test" "libuv;uvcpp")
+ExeImport("test" "libuv;uvcpp;dmtimer")
