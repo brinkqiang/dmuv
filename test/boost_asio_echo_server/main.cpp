@@ -16,7 +16,6 @@ using SocketPtr = std::shared_ptr<SocketStr>;
 
 void startAccept(io_service& io, ip::tcp::acceptor& acceptor);
 void startRead(SocketPtr ptr);
-//void startTimer(asio::deadline_timer& timer);
 
 std::atomic<uint64_t> cnt(0);
 
@@ -34,7 +33,7 @@ void onRead(SocketPtr ptr, const asio::error_code& error, std::size_t size)
     {
         return;
     }
-    cnt += size;
+    cnt += 1;
     std::copy(ptr->readBuffer, ptr->readBuffer + size, ptr->writeBuffer);
     write(ptr, size);
 }
