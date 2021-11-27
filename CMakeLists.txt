@@ -7,6 +7,8 @@ INCLUDE(cmake/ModuleImport.cmake)
 INCLUDE(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
+ADD_SUBDIRECTORY(thirdparty/libuv)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 ADD_DEFINITIONS(-DUSE_UVPP)
 ADD_DEFINITIONS(-DNOMINMAX)
 set( CMAKE_CXX_STANDARD 17)
@@ -18,4 +20,4 @@ ModuleImport("libuv" "thirdparty/libuv")
 
 LibImportDepends("uvcpp" "src/uvcpp" "uv_a")
 
-ExeImport("test" "uv_a;uvcpp")
+ExeImport("test" "uv_a")
