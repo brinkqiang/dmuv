@@ -2,7 +2,7 @@
 #include <memory>
 #include <atomic>
 #include <vector>
-
+#include <functional>
 #include <asio.hpp>
 
 using namespace asio;
