@@ -30,6 +30,7 @@ int main(int argc, char** args)
         dataSize += size;
         datacount += 1;
         ptr->write(data, size, nullptr);
+        ptr->write(data, size, nullptr);
     });
     //心跳超时
     //server.setTimeout(15);
