@@ -38,7 +38,7 @@ int main(int argc, char** args)
 
     uv::Timer timer(loop, 1000, 1000, [&](uv::Timer* ptr)
     {
-        std::cout << "send data:" << (dataSize / 1024) << " kbyte/s cout: " << datacount << std::endl;
+        std::cout << "send data:" << (dataSize / (1024 * 1024)) << " M/s cout: " << datacount << std::endl;
         dataSize = 0;
         datacount = 0;
     });
